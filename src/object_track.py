@@ -45,14 +45,35 @@ def update_color_value(x, color, is_min):
             pass
 
 
-def load_config(config_path):
+def load_config(config_path=CONFIG_FILE):
     # TODO: LAB-cal.json 파일을 읽어와서 전역 변수에 설정하기
-    pass
+    global l_min, a_min, b_min, l_max, a_max, b_max
+    with open(config_path,"r") as f:
+        init_dict = json.load(f)
+        l_min = init_dict["l_min"]
+        l_max = init_dict["l_max"]
+        a_min = init_dict["a_min"]
+        a_max = init_dict["a_max"]
+        b_min = init_dict["b_min"]
+        b_max = init_dict["b_max"]
 
 
-def save_config(config_path):
+
+def save_config(config_path=CONFIG_FILE):
     # TODO: 현재 설정된 전역 변수를 LAB-cal.json 파일로 저장하기
-    pass
+    global l_min, a_min, b_min, l_max, a_max, b_max
+    save_data = {
+        #TODO Fill out with l_min,... 6
+        "l_min":l_min,
+        "l_max":l_max,
+        "a_min":a_min,
+        "a_max":a_max,
+        "b_min":b_min,
+        "b_max":b_max,
+    }
+    with open(config_path,"w") as f:
+        import json
+        f.write(json.dumps(save_data,indent=2))
 
 
 def update_trackbar_positions():
@@ -65,14 +86,26 @@ def update_trackbar_positions():
 
 
 def find_biggest_contour(mask):
-    # TODO: mask 변수 값으로 부터 연결된 객체 중 가장 큰 객체 찾기
-    pass
+
+    contours,_ = cv2.findContours(mask,mode=cv2.RETR_EXTERNAL,method=cv2.CHAIN_APPROX_SIMPLE)
+    # contours = cv2.contourArea(obj)
+    if not contours:
+        return None
+    max_con = max(contours,key=cv2.contourArea)
+
+    
+    return max_con
 
 
 def draw_boundingbox(image, contour):
     # TODO: 가장 큰 객체에 대해 외접하는 바운딩 박스 그리기, cv2.boundingRect() 사용
     # TODO: Rect: (x y w h) 형태로 좌표 출력, cv2.putText() 사용
-    pass
+    # pass
+    x,y,w,h = cv2.boundingRect(contour)
+    cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),2)
+    cv2.putText(image,f"rect ({x},{y},{w},{h})",(x,y-10),cv2.FONT_HERSHEY_PLAIN,0,(0,255,0),1)
+    # cv2.rectangle(mask, (10, 10), (30, 30), 255, -1)
+    # cv2.rectangle(mask, (50, 50), (90, 90), 255, -1)
 
 
 if __name__ == "__main__":
