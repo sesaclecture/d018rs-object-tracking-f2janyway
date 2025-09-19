@@ -103,7 +103,7 @@ def draw_boundingbox(image, contour):
     # pass
     x,y,w,h = cv2.boundingRect(contour)
     cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),2)
-    cv2.putText(image,f"rect ({x},{y},{w},{h})",(x,y-10),cv2.FONT_HERSHEY_PLAIN,0,(0,255,0),1)
+    cv2.putText(image,f"rect ({x},{y},{w},{h})",(x,y-10),cv2.FONT_HERSHEY_PLAIN,1,(0,255,0),1)
     # cv2.rectangle(mask, (10, 10), (30, 30), 255, -1)
     # cv2.rectangle(mask, (50, 50), (90, 90), 255, -1)
 
